@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue JS Intro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<!-- Site de la documentation : https://vuejs.org/v2/guide/index.html#What-is-Vue-js -->
+
+<!-- On place l'HTML qui doit être régit par Vue.js dans une div id="app". Cet ID servira à cibler la div dans le fichier js. [1] -->
+<div id="app">
+
+    <div class="navbar">
+        <ul>
+            <!-- Dans la navbar, on peut placer des liens, dont les attributs sont stockés dans le fichier JavaScript.
+            Ici, les attributs target, href et le texte du <a> sont renseignés dans le fichier js. [3]-->
+            <li>
+                <a v-bind:target="mytarget" v-bind:href="myhref">{{ myhreftext }}</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="product">
+        <!-- On sépare le code en deux parties, les 2 colonnes flex qui sont l'image, et les informations sur le produit. -->
+        <div class="product-image">
+            <!-- les attributs utilisés par Vue.Js ont le préfixe "v-". Certains peuvent être écrits plus simplement, se référrer à la cheatsheet. -->
+            <!-- Ici, on lie (du verbe lier, 'bind' en anglais) la source de la balise img à une data dans le fichier js : "image". [2] -->
+            <img id="bootsimage" v-bind:src="image" alt="boots">
+        </div>
+
+        <div class="product-info">
+            <h1>{{ product }}</h1>
+            <!-- Il est possible de lier un objet contenant plusieurs données. Ici, on veut changer la couleur, font-weight et font-size de cette balise p en une seule instruction [4] -->
+            <p v-bind:style="styleObject" v-show="inStock">In Stock</p>
+            <!-- Les tests logiques sont aussi écrits ici. un v-if="Donnee" correspond à tester si la donnée est true ou false. [5] -->
+            <span v-if="onSale">On Sale!</span>
+            <!-- on peut aussi tester avec des comparaisons, comme on l'écrirait en JS. -->
+            <p v-if="inventory > 10">In Stock</p>
+            <p v-else-if="inventory < 10 && inventory > 0">Almost sold out!</p>
+            <p v-else>Out of Stock</p>
+            <!-- Au lieu d'écrire 3 <li> dans la liste, Vue.Js permet de boucler, puis afficher les li en parcourant le tableau. La syntaxe ci-dessous ressemble à un foreach. detail est la $value en php, et details est le $tableau. [6] -->
+            <ul>
+                <li v-for="detail in details">
+                    {{ detail }}
+                </li>
+            </ul>
+            
+            <!-- On souhaite proposer au client plusieurs couleurs, ou dans mon cas, deux côtés (?). On va donc lier une clé, qui contient un ID de variante, ainsi qu'un nom de variante et une image associée. Quand l'évènement mouseover arrive, la fonction updateProduct est appelée. [7] -->
+            <div v-for="variant in variants" v-bind:key="variant.variantId">
+                <p @mouseover="updateProduct(variant.variantImage)">{{ variant.variantOrientation }}</p>
+            </div>
+
+            <!-- Quand un évènement provoque plusieurs réactions, on peut créer une fonction pour tout effectuer d'un coup. Ici, la fonction "addToCart" est appelée quand on clique sur le bouton "Ajouter au Panier" Notez les 2 manières d'écrire l'event Listener : v-on:click ou @click. [8] -->
+            <button v-on:click="addToCart">Ajouter au Panier</button>
+            <button @click="removeFromCart">Retirer du Panier</button>
+
+            <div class="cart">
+                <p>Panier : {{ cart }}</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.19/vue.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
