@@ -1,0 +1,85 @@
+﻿- CREE LE PROJET :
+    composer create-project symfony/website-skeleton nomDuProjet
+
+- DEMARRER LE SERVEUR :
+    php bin/console server:run
+    php -S 127.0.0.1:8000 -t public
+
+- CREER UN CONTROLLER :
+    php bin/console make:Controller nom
+
+===========================================================
+====================== GESTION BDD ========================
+===========================================================
+    - Modifier les variables de connexion dans le fichier .Env
+
+    - Créer une BDD dans PHPMyAdmin :
+        php bin/console doctrine:database:create
+
+    - Crée une entité : (src/Entity/..)
+        php bin/console make:entity nomDeLaTable
+            1) choix du nom de la class
+                crée un fichier "nomDeLaTable" représentant l'entité(dans le fichier Entity)
+                crée un fichier repository charger de communiquer(push, pull les info) avec la BDD
+            2) Une fois satisfait faire php bin/console make:migration (crée un fichier migration dans src/Entity/Migrations/..)
+            3)php bin/console doctrine:migrations:migrate (fait la migration)
+
+    - Ajouter une table en BDD :
+        php bin/console make:entity nomDeTable (si nom existant rajoute une colonne sinon ajoute une table)
+
+===========================================================
+=================== ADMIN CONNEXION =======================
+===========================================================
+    composer require symfony/security-bundle (Ajoute le bundle Security)
+    php bin/console make:user   
+    php bin/console make:migration  (Migre l'ID/MDP/DROITS de l'utilisateur en BDD)
+    php bin/console doctrine:migrations:migrate
+    composer req orm-fixtures --dev
+    php bin/console make:fixtures   (Crée un fichier User dans src/DataFixtures/..)
+    php bin/console doctrine:fixtures:load
+
+==== Crée un formulaire de connexion ====
+    make:auth
+
+===========================================================
+==================== WEBPACK Encore =======================
+===========================================================
+(Ajoute un Assets pour faire du CSS&JS)
+https://symfony.com/doc/current/frontend/encore/installation.html
+    composer require encore
+    yarn install
+    composer require asset (Extension pour TWIG)
+    yarn add sass-loader node-sass --dev (pour inclure le SASS)
+    Décommenter dans webpack.config.js :
+            .addEntry('js/app', './assets/js/app.js')
+            .addEntry('css/app', './assets/scss/app.scss') 
+    
+===========================================================
+========================== YARN SASS ======================
+===========================================================
+yarn run encore dev --watch
+yarn run encore production
+
+Liens à mettre dans template :
+<link rel="stylesheet" href="{{ asset('build/css/app.css') }}" type="text/css" media="all" />
+<script type="text/javascript" src="{{ asset('build/js/app.js') }}"></script>
+===========================================================
+================== COMMANDES DIVERS =======================
+===========================================================
+==== AFFICHER COMMANDES SYMFONY ====
+    php bin/console
+
+==== DEBUG ====
+    php bin/console debug:container
+    php bin/console debug:autowiring
+
+==== Génère les fichiers pour la mise en prod ====
+    npm run build
+
+==== INITIALISER COMPOSER : (Installation de base) ====
+    composer init
+==== INSTALLER COMPOSER : (Pour faire marcher un projet existant de TWIG, Symfony...) ====
+    composer install
+
+==== INITIALISE TWIG : (projet de base) ====
+    composer require "twig/twig:^2.0"
